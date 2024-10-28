@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import SelectComponent from "../SelectComponent";
 import { Controller } from "react-hook-form";
 

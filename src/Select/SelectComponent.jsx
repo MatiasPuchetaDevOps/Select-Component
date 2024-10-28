@@ -5,9 +5,8 @@ import React, {
   useEffect,
   forwardRef,
 } from "react";
-import { debounce, set } from "lodash";
+import { debounce } from "lodash";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useClearSelect } from "../../context/Select/ClearSelectContext.jsx";
 import ChildrenSelect from "./ChildrenSelect";
 import FormatComponent from "./FormatComponent";
 
@@ -42,8 +41,6 @@ const SelectComponent = forwardRef(
       isMultiple ? [] : null
     );
     const [arrayDropdown, setArrayDropdown] = useState([]);
-    // Obtener el estado de limpieza del contexto
-    const { clearSelectMap } = useClearSelect();
     // Referencias para manejar clicks fuera del modal
     const modalRef = useRef(null);
     const inputRef = useRef(null);
@@ -59,6 +56,12 @@ const SelectComponent = forwardRef(
     }, [render]);
 
     useEffect(() => {
+      if (props.value === `` && isMultiple) {
+        setSearchValue("");
+      }
+      if (props.value === `` && !isMultiple) {
+        setSearchValue([]);
+      }
       if (
         render?.length > 0 &&
         !hasRenderedOnce &&
@@ -209,22 +212,6 @@ const SelectComponent = forwardRef(
         window.removeEventListener("scroll", handleScroll, true);
       };
     }, [isDropdownOpen]);
-
-    // Efecto para limpiar el input cuando clearSelectMap[id] cambia
-    useEffect(() => {
-      if (clearSelectMap[id]) {
-        setSelectedValueID();
-        if (!isMultiple) {
-          setSearchValue("");
-          if (isSearch) {
-            setArrayDropdown([]);
-          }
-        } else {
-          setSearchValue([]);
-          onSelect([]);
-        }
-      }
-    }, [clearSelectMap, id]);
 
     // Función para manejar el ícono de la derecha
     const renderRightIcon = () => {
@@ -407,7 +394,6 @@ const SelectComponent = forwardRef(
             onChange={handleSearchChange}
             onFocus={() => setIsDropdownOpen(true)}
             onBlur={() => setIsDropdownOpen(false)}
-            onf
             onClick={() => setIsDropdownOpen(true)}
             placeholder={placeholder}
           />
