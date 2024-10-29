@@ -12,7 +12,6 @@ function ChildrenSelect({
   searchValue,
   clearSelect = false,
   isCategory,
-  backGroundColor,
   setFakeInput,
   selectedValueID,
   setSelectedValueID,
@@ -20,7 +19,10 @@ function ChildrenSelect({
   scrollSelect,
   setScrollSelect,
   isMultiple,
-  customFormat
+  customFormat,
+  selectedClassName,
+  height,
+  dropHover
 }) {
   const listRef = useRef();
   const [highlightedIndex, setHighlightedIndex] = useState(scrollSelect || 0);
@@ -142,25 +144,21 @@ function ChildrenSelect({
   const renderItem = (item, value, idx) => (
     <div
       key={value}
-      className={`break-words py-2  ${
-        highlightedIndex === idx ? "bg-slate-600" : ""
-      } cursor-pointer ${
+      className={`break-words py-2 ${dropHover ? dropHover : "hover:bg-slate-600"}  ${
+        highlightedIndex === idx ? (selectedClassName || "bg-slate-600") : ""}
+        cursor-pointer ${
         isMultiple
           ? selectedValueID.includes(value)
-            ? "bg-modal selected"
+            ? `${selectedClassName || "bg-[#2a3547]"} selected`
             : ""
           : selectedValueID === value
-          ? "bg-modal selected"
+          ? `${selectedClassName || "bg-[#2a3547]"} selected`
           : ""
-      } overflow-scroll ${
-        backGroundColor === "modal"
-          ? "bg-secondary-hover"
-          : "hover:bg-slate-600"
-      } rounded-md p-2`}
+      } overflow-scroll rounded-md p-2`}
       onClick={() => handleSelect(isCategory ? value : item, value, idx)}
     >
       <FormatComponent
-        item={isCategory ? value : item}
+        item={item}
         customFormat={customFormat}
         defaultFormat={
           <div>
@@ -201,7 +199,7 @@ function ChildrenSelect({
   };
 
   return arrayDropdown ? (
-    <div className={`${calculateHeightClassNormal(arrayDropdown.length)}`}>
+    <div className={`${height || calculateHeightClassNormal(arrayDropdown.length)}`}>
       <VList ref={listRef} className="scrollBar">
         {renderOptions()}
       </VList>

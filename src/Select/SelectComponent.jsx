@@ -11,28 +11,32 @@ import ChildrenSelect from "./ChildrenSelect";
 import FormatComponent from "./FormatComponent";
 
 const SelectComponent = forwardRef(
-  ({
-    render,
-    name,
-    funtionSearch = () => {},
-    onSelect = () => {},
-    isCategory,
-    defaultValue = "",
-    searchProperty = "name",
-    disabled = false,
-    placeholder = "",
-    backGroundColor = "secondary",
-    isSearch = false,
-    isFilter = !isSearch,
-    className = "",
-    required = true,
-    isMultiple = false,
-    customFormat,
-    ...props
-  },
-  ref
-) => {
-
+  (
+    {
+      render,
+      name,
+      funtionSearch = () => {},
+      onSelect = () => {},
+      isCategory,
+      defaultValue = "",
+      searchProperty = "name",
+      disabled = false,
+      placeholder = "",
+      isSearch = false,
+      isFilter = !isSearch,
+      className = "",
+      required = true,
+      isMultiple = false,
+      customFormat,
+      disabledClassName,
+      dropClassName,
+      selectedClassName,
+      height,
+      dropHover,
+      ...props
+    },
+    ref
+  ) => {
     // Estados del componente
     const [searchValue, setSearchValue] = useState(isMultiple ? [] : "");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Estado para mostrar/ocultar el dropdown
@@ -372,16 +376,23 @@ const SelectComponent = forwardRef(
     };
 
     return (
-      <div id={`Select-${name}`} className={`w-full text-left ${className}`}>
+      <>
         {/* Input de búsqueda */}
-        <div className="relative">
+        <div className="relative w-full">
           <input
             ref={inputRef}
             type="text"
+            className={`${
+              disabled
+                ? disabledClassName ||
+                  className ||
+                  " h-10 px-2 bg-[#3A4659] text-gray-400 w-full rounded-md hover:outline hover:outline-none focus:outline-none "
+                : `${
+                    className ||
+                    "h-10 px-2 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none"
+                  } }`
+            }`}
             multiple={isMultiple}
-            className={`h-10 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none disabled:bg-[#2a3547]  ${
-              !disabled && "px-2"
-            } pr-8 `}
             value={
               searchValue?.long_name ||
               searchValue?.name ||
@@ -399,6 +410,10 @@ const SelectComponent = forwardRef(
             onClick={() => setIsDropdownOpen(true)}
             placeholder={placeholder}
           />
+          {/* Ícono derecho dentro del input */}
+          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+            {!disabled && renderRightIcon()}
+          </div>
 
           {isMultiple && (
             <div
@@ -412,13 +427,18 @@ const SelectComponent = forwardRef(
                   inputRef.current.focus();
                 }, 0);
               }}
-              className={`h-10 bg-secondary ${
-                arrayDropdown.length > 0 ? "text-white" : "text-gray-400"
-              } w-full rounded-md hover:outline hover:outline-none focus:outline-none; absolute top-0 left-0 z-50 truncate py-1 flex items-center ${
-                disabled ? "bg-modal disabled-style" : ""
-              } `}
+              className={` ${
+                disabled
+                  ? disabledClassName ||
+                    className + "text-gray-400" ||
+                    "h-10 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none "
+                  : `${
+                      className ||
+                      " h-10 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none"
+                    } "}`
+              }`}
             >
-              <div className="px-2 pr-8  w-[96%] truncate">
+              <div className=" pr-8  w-[96%] truncate">
                 {searchValue ? (
                   <FormatComponent
                     item={searchValue}
@@ -469,15 +489,22 @@ const SelectComponent = forwardRef(
                   inputRef.current.focus();
                 }, 0);
               }}
-              className={`h-10 bg-secondary ${
-                arrayDropdown.length > 0 && searchValue
-                  ? "text-white"
-                  : "text-gray-400"
-              } w-full rounded-md hover:outline hover:outline-none focus:outline-none; absolute top-0 left-0 z-50 truncate py-1 flex items-center ${
-                disabled ? "bg-modal disabled-style" : ""
-              } `}
+              className={` ${
+                disabled
+                  ? disabledClassName ||
+                    className + "text-gray-400" ||
+                    "h-10 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none "
+                  : `${
+                      className ||
+                      "h-10 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none"
+                    } absolute top-0 left-0 z-50 truncate py-1 flex items-center ${
+                      arrayDropdown.length > 0 && searchValue
+                        ? "text-white"
+                        : "text-gray-400"
+                    }`
+              }`}
             >
-              <div className="px-2 pr-8  w-[96%] truncate">
+              <div className="pr-8  w-[96%] truncate">
                 {searchValue ? (
                   <FormatComponent
                     item={searchValue}
@@ -503,11 +530,6 @@ const SelectComponent = forwardRef(
               </div>
             </div>
           )}
-
-          {/* Ícono derecho dentro del input */}
-          <div className="absolute right-3 top-1/2 -translate-y-1/2">
-            {!disabled && renderRightIcon()}
-          </div>
         </div>
 
         {/* Dropdown de resultados */}
@@ -529,7 +551,7 @@ const SelectComponent = forwardRef(
                 }}
                 ref={modalRef}
                 className={` z-[2147483647]  ${
-                  backGroundColor === "modal" ? "bg-modal" : "bg-[#3a475a]"
+                  dropClassName ? dropClassName : "bg-[#3a4659]"
                 } rounded-md scrollBar p-2 max-h-60  fade-in shadow-lg overflow-scroll 
             `}
               >
@@ -543,7 +565,6 @@ const SelectComponent = forwardRef(
                     name,
                     isCategory,
                     searchProperty,
-                    backGroundColor,
                     selectedValueID,
                     setSelectedValueID,
                     handleDeletedMultiple,
@@ -551,7 +572,10 @@ const SelectComponent = forwardRef(
                     isMultiple,
                     scrollSelect,
                     setScrollSelect,
-                    customFormat
+                    customFormat,
+                    selectedClassName,
+                    height,
+                    dropHover,
                   }}
                 />
               </div>
@@ -570,7 +594,7 @@ const SelectComponent = forwardRef(
                 }}
                 ref={modalRef}
                 className={` z-[2147483647]  ${
-                  backGroundColor === "modal" ? "bg-modal" : "bg-[#3a475a]"
+                  dropClassName ? dropClassName : "bg-[#3a4659]"
                 } rounded-md scrollBar p-2 max-h-60  fade-in shadow-lg overflow-scroll 
           `}
               >
@@ -593,7 +617,7 @@ const SelectComponent = forwardRef(
                 }}
                 ref={modalRef}
                 className={` z-[2147483647]  ${
-                  backGroundColor === "modal" ? "bg-modal" : "bg-[#3a475a]"
+                  dropClassName ? dropClassName : "bg-[#3a4659]"
                 } rounded-md scrollBar p-2 max-h-60  fade-in shadow-lg overflow-scroll 
             `}
               >
@@ -602,7 +626,7 @@ const SelectComponent = forwardRef(
             )}
           </>
         )}
-      </div>
+      </>
     );
   }
 );

@@ -3,11 +3,12 @@ import SelectComponent from "./SelectComponent";
 import { Controller } from "react-hook-form";
 
 function ControllerSelectComponent({
+  id,
   name,
   control,
   render,
   required = false,
-  customFormat,
+  type = "name",
   disabled = false,
   defaultValue,
   searchProperty = ["name"],
@@ -18,9 +19,12 @@ function ControllerSelectComponent({
   isSearch = false,
   funtionSearch = () => {},
   onSelect = () => {},
-  backGroundColor = "secondary",
   returnString = false,
-  isCategory = false,
+  disabledClassName,
+  dropClassName,
+  selectedClassName,
+  height,
+  dropHover
 }) {
   const handleValue = async (item, field) => {
     let value;
@@ -80,21 +84,25 @@ function ControllerSelectComponent({
       render={({ field }) => (
         <SelectComponent
           {...field}
+          id={id}
           name={name}
           render={render}
-          isCategory={isCategory}
           onSelect={(item) => handleValue(item, field)}
           disabled={disabled}
           className={className}
-          customFormat={customFormat}
           required={required}
           defaultValue={defaultValue}
+          type={type}
           funtionSearch={funtionSearch}
           searchProperty={searchProperty}
           placeholder={placeholder}
           isSearch={isSearch}
-          backGroundColor={backGroundColor}
           isMultiple={isMultiple}
+          disabledClassName={disabledClassName}
+          dropClassName = {dropClassName}
+          selectedClassName = {selectedClassName}
+          height = {height}
+          dropHover = {dropHover}
         />
       )}
     />
