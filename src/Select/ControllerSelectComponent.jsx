@@ -1,5 +1,5 @@
 import React from "react";
-import SelectComponent from "../SelectComponent";
+import SelectComponent from "./SelectComponent";
 import { Controller } from "react-hook-form";
 
 function ControllerSelectComponent({
@@ -88,7 +88,6 @@ function ControllerSelectComponent({
           className={className}
           required={required}
           defaultValue={defaultValue}
-          type={type}
           funtionSearch={funtionSearch}
           searchProperty={searchProperty}
           placeholder={placeholder}

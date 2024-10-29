@@ -11,29 +11,26 @@ import ChildrenSelect from "./ChildrenSelect";
 import FormatComponent from "./FormatComponent";
 
 const SelectComponent = forwardRef(
-  (
-    {
-      id,
-      render,
-      name,
-      funtionSearch = () => {},
-      onSelect = () => {},
-      type,
-      isCategory,
-      defaultValue = "",
-      searchProperty,
-      disabled = false,
-      placeholder = "",
-      backGroundColor = "secondary",
-      isSearch = false,
-      isFilter = !isSearch,
-      className = "",
-      required = true,
-      isMultiple = false,
-      ...props
-    },
-    ref
-  ) => {
+  ({
+    id,
+    render,
+    name,
+    funtionSearch = () => {},
+    onSelect = () => {},
+    isCategory,
+    defaultValue = "",
+    searchProperty = "name",
+    disabled = false,
+    placeholder = "",
+    backGroundColor = "secondary",
+    isSearch = false,
+    isFilter = !isSearch,
+    className = "",
+    required = true,
+    isMultiple = false,
+    customFormat,
+    ...props
+  }) => {
     // Estados del componente
     const [searchValue, setSearchValue] = useState(isMultiple ? [] : "");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Estado para mostrar/ocultar el dropdown
@@ -303,6 +300,7 @@ const SelectComponent = forwardRef(
       }
     };
 
+    // Función para manejar el valor por defecto
     useEffect(() => {
       if (isMultiple) {
         // setea el defaultValue en el input si es multiple
@@ -336,6 +334,7 @@ const SelectComponent = forwardRef(
       }
     }, [defaultValue, render]);
 
+    // Función para manejar el valor eliminado
     const handleDeletedMultiple = (item) => {
       if (isMultiple) {
         const valueItem =
@@ -378,7 +377,7 @@ const SelectComponent = forwardRef(
             ref={inputRef}
             type="text"
             multiple={isMultiple}
-            className={`select-format disabled:bg-[#2a3547]  ${
+            className={`h-10 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none disabled:bg-[#2a3547]  ${
               !disabled && "px-2"
             } pr-8 `}
             value={
@@ -387,6 +386,7 @@ const SelectComponent = forwardRef(
               searchValue?.username ||
               searchValue?.description ||
               searchValue?.full_name ||
+              searchValue[searchProperty] ||
               searchValue ||
               ""
             }
@@ -420,7 +420,7 @@ const SelectComponent = forwardRef(
                 {searchValue ? (
                   <FormatComponent
                     item={searchValue}
-                    type={type}
+                    customFormat={customFormat}
                     defaultFormat={
                       <div className="flex w-full flex-wrap h-10 overflow-scroll gap-2">
                         {searchValue.map((item, idx) => (
@@ -432,6 +432,7 @@ const SelectComponent = forwardRef(
                               item.username ||
                               item.full_name ||
                               item.description ||
+                              searchValue[searchProperty] ||
                               item}
                             {!disabled && (
                               <span
@@ -478,7 +479,7 @@ const SelectComponent = forwardRef(
                 {searchValue ? (
                   <FormatComponent
                     item={searchValue}
-                    type={type}
+                    customFormat={customFormat}
                     defaultFormat={
                       <div>
                         {" "}
@@ -486,6 +487,7 @@ const SelectComponent = forwardRef(
                           searchValue.username ||
                           searchValue.description ||
                           searchValue.full_name ||
+                          searchValue[searchProperty] ||
                           searchValue}
                       </div>
                     }
@@ -538,7 +540,6 @@ const SelectComponent = forwardRef(
                     id,
                     setSearchValue,
                     setIsDropdownOpen,
-                    type,
                     name,
                     isCategory,
                     searchProperty,

@@ -7,8 +7,8 @@ function ChildrenSelect({
   onSelect,
   setSearchValue,
   setIsDropdownOpen,
-  type = "name",
   name,
+  searchProperty,
   searchValue,
   clearSelect = false,
   isCategory,
@@ -33,12 +33,22 @@ function ChildrenSelect({
   const handleSelect = (item, displayValue = "", idx) => {
     setScrollSelect(idx);
     const value =
-      item._id || item.name || item.username || item.full_name || item;
+      item._id ||
+      item.name ||
+      item.username ||
+      item.full_name ||
+      searchValue[searchProperty] ||
+      item;
     if (isMultiple) {
       // Elimina el dato en el drop
       if (isMultiple && selectedValueID.includes(value)) {
         handleDeletedMultiple(
-          item.name || item.username || item.full_name || item._id || item
+          item.name ||
+            item.username ||
+            item.full_name ||
+            item._id ||
+            searchValue[searchProperty] ||
+            item
         );
         setSelectedValueID((prev) => prev.filter((item) => item !== value));
         return;
@@ -46,26 +56,38 @@ function ChildrenSelect({
       setSelectedValueID((prev) => [...prev, value]);
       setSearchValue((prev) => [
         ...prev,
-        item.name || item.username || item.full_name || item._id || item,
+        item.name ||
+          item.username ||
+          item.full_name ||
+          item._id ||
+          searchValue[searchProperty] ||
+          item,
       ]);
     } else {
       setSelectedValueID(value);
       setSearchValue(item);
     }
 
-    const selection =
-      type === "sparepart"
-        ? { _id: item._id, code: displayValue.visual_code, type: name, item }
-        : {
-            type: name,
-            item,
-            name: item.name || item.username || item.full_name,
-          };
+    const selection = {
+      type: name,
+      item,
+      name:
+        item.name ||
+        item.username ||
+        item.full_name ||
+        searchValue[searchProperty] ||
+        item,
+    };
 
     if (isMultiple) {
       const valueItem = arrayDropdown.filter(
         (item) =>
-          (item._id || item.name || item.username || item.full_name) === value
+          (item._id ||
+            item.name ||
+            item.username ||
+            item.full_name ||
+            searchValue[searchProperty] ||
+            item) === value
       )[0];
       onSelect([...selectedValueID, valueItem._id]);
     } else {
@@ -134,20 +156,20 @@ function ChildrenSelect({
           ? "bg-secondary-hover"
           : "hover:bg-slate-600"
       } rounded-md p-2`}
-      onClick={() =>
-        handleSelect(
-          isCategory ? value : item,
-          type === "sparepart" ? item : value,
-          idx
-        )
-      }
+      onClick={() => handleSelect(isCategory ? value : item, value, idx)}
     >
       <FormatComponent
         item={item}
-        type={type}
         defaultFormat={
           <div>
-            {isCategory ? value : item.long_name || item.name || item.username}
+            {isCategory
+              ? value
+              : item.long_name ||
+                item.name ||
+                item.username ||
+                item.full_name ||
+                searchValue[searchProperty] ||
+                item}
           </div>
         }
       />
@@ -175,22 +197,9 @@ function ChildrenSelect({
     if (length === 4) return "h-[10rem]";
     return "h-40";
   };
-  const calculateHeightClass = (length) => {
-    if (length === 1) return "h-[3rem]";
-    if (length === 2) return "h-[5rem]";
-    if (length === 3) return "h-[7rem]";
-    if (length === 4) return "h-[10rem]";
-    return "h-40";
-  };
 
   return arrayDropdown ? (
-    <div
-      className={`${
-        type === "name"
-          ? calculateHeightClassNormal(arrayDropdown.length)
-          : calculateHeightClass(arrayDropdown.length)
-      }`}
-    >
+    <div className={`${calculateHeightClassNormal(arrayDropdown.length)}`}>
       <VList ref={listRef} className="scrollBar">
         {renderOptions()}
       </VList>
