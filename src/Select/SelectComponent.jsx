@@ -12,7 +12,6 @@ import FormatComponent from "./FormatComponent";
 
 const SelectComponent = forwardRef(
   ({
-    id,
     render,
     name,
     funtionSearch = () => {},
@@ -30,7 +29,10 @@ const SelectComponent = forwardRef(
     isMultiple = false,
     customFormat,
     ...props
-  }) => {
+  },
+  ref
+) => {
+
     // Estados del componente
     const [searchValue, setSearchValue] = useState(isMultiple ? [] : "");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Estado para mostrar/ocultar el dropdown
@@ -370,7 +372,7 @@ const SelectComponent = forwardRef(
     };
 
     return (
-      <div id={id} className={`w-full text-left ${className}`}>
+      <div id={`Select-${name}`} className={`w-full text-left ${className}`}>
         {/* Input de búsqueda */}
         <div className="relative">
           <input
@@ -482,7 +484,6 @@ const SelectComponent = forwardRef(
                     customFormat={customFormat}
                     defaultFormat={
                       <div>
-                        {" "}
                         {searchValue.name ||
                           searchValue.username ||
                           searchValue.description ||
@@ -537,7 +538,6 @@ const SelectComponent = forwardRef(
                     arrayDropdown,
                     onSelect,
                     searchValue,
-                    id,
                     setSearchValue,
                     setIsDropdownOpen,
                     name,
@@ -551,6 +551,7 @@ const SelectComponent = forwardRef(
                     isMultiple,
                     scrollSelect,
                     setScrollSelect,
+                    customFormat
                   }}
                 />
               </div>

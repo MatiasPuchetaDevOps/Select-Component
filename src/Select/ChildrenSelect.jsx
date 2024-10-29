@@ -20,6 +20,7 @@ function ChildrenSelect({
   scrollSelect,
   setScrollSelect,
   isMultiple,
+  customFormat
 }) {
   const listRef = useRef();
   const [highlightedIndex, setHighlightedIndex] = useState(scrollSelect || 0);
@@ -159,7 +160,8 @@ function ChildrenSelect({
       onClick={() => handleSelect(isCategory ? value : item, value, idx)}
     >
       <FormatComponent
-        item={item}
+        item={isCategory ? value : item}
+        customFormat={customFormat}
         defaultFormat={
           <div>
             {isCategory
