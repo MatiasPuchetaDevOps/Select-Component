@@ -378,7 +378,7 @@ const SelectComponent = forwardRef(
     return (
       <>
         {/* Input de búsqueda */}
-        <div className="relative w-full">
+        <div className="relative w-full text-left">
           <input
             ref={inputRef}
             type="text"
@@ -431,10 +431,10 @@ const SelectComponent = forwardRef(
                 disabled
                   ? disabledClassName ||
                     className + "text-gray-400" ||
-                    "h-10 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none "
+                    "h-10  px-2 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none "
                   : `${
                       className ||
-                      " h-10 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none"
+                      " h-10 px-2 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none"
                     } "}`
               }`}
             >
@@ -493,10 +493,10 @@ const SelectComponent = forwardRef(
                 disabled
                   ? disabledClassName ||
                     className + "text-gray-400" ||
-                    "h-10 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none "
+                    "h-10 px-2 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none "
                   : `${
                       className ||
-                      "h-10 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none"
+                      "h-10 px-2 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none"
                     } absolute top-0 left-0 z-50 truncate py-1 flex items-center ${
                       arrayDropdown.length > 0 && searchValue
                         ? "text-white"
@@ -552,7 +552,7 @@ const SelectComponent = forwardRef(
                 ref={modalRef}
                 className={` z-[2147483647]  ${
                   dropClassName ? dropClassName : "bg-[#3a4659]"
-                } rounded-md scrollBar p-2 max-h-60  fade-in shadow-lg overflow-scroll 
+                } rounded-md scrollBar p-2 max-h-60 text-left  fade-in shadow-lg overflow-scroll 
             `}
               >
                 <ChildrenSelect
@@ -595,7 +595,7 @@ const SelectComponent = forwardRef(
                 ref={modalRef}
                 className={` z-[2147483647]  ${
                   dropClassName ? dropClassName : "bg-[#3a4659]"
-                } rounded-md scrollBar p-2 max-h-60  fade-in shadow-lg overflow-scroll 
+                } rounded-md scrollBar p-2 max-h-60 text-left fade-in shadow-lg overflow-scroll 
           `}
               >
                 <p className="text-gray-400">
@@ -618,7 +618,7 @@ const SelectComponent = forwardRef(
                 ref={modalRef}
                 className={` z-[2147483647]  ${
                   dropClassName ? dropClassName : "bg-[#3a4659]"
-                } rounded-md scrollBar p-2 max-h-60  fade-in shadow-lg overflow-scroll 
+                } rounded-md scrollBar p-2 max-h-60 text-left fade-in shadow-lg overflow-scroll 
             `}
               >
                 <p className="text-gray-400">No se encontraron resultados</p>

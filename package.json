@@ -1,10 +1,11 @@
 {
   "name": "select-components",
-  "version": "1.0.20",
+  "version": "1.0.24",
   "description": "",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "scripts": {
+
     "build": "babel src --out-dir dist && copyfiles index.d.ts dist"
   },
   "keywords": [],

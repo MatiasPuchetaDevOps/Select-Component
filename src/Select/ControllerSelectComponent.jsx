@@ -13,12 +13,14 @@ function ControllerSelectComponent({
   defaultValue,
   searchProperty = ["name"],
   placeholder = "",
+  isCategory,
   className = "",
   isMultiple = false,
   optionsAlternatives = false,
   isSearch = false,
   funtionSearch = () => {},
   onSelect = () => {},
+  customFormat,
   returnString = false,
   disabledClassName,
   dropClassName,
@@ -103,6 +105,8 @@ function ControllerSelectComponent({
           selectedClassName = {selectedClassName}
           height = {height}
           dropHover = {dropHover}
+          isCategory={isCategory}
+          customFormat={customFormat}
         />
       )}
     />
