@@ -427,18 +427,23 @@ const SelectComponent = forwardRef(
                   inputRef.current.focus();
                 }, 0);
               }}
-              className={` ${
+              className={`${
                 disabled
-                  ? disabledClassName ||
-                    className + "text-gray-400" ||
-                    "h-10  px-2 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none "
+                  ? `${
+                      disabledClassName ||
+                      className ||
+                      "h-10 bg-[#3A4659] text-white w-full rounded-md hover:outline-none focus:outline-none"
+                    } absolute w-full top-0 left-0 truncate py-1 flex items-center`
                   : `${
                       className ||
-                      " h-10 px-2 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none"
-                    } "}`
-              }`}
+                      "h-10 px-2 bg-[#3A4659] text-white w-full rounded-md hover:outline-none focus:outline-none"
+                    } absolute w-full top-0 left-0 truncate py-1 flex items-center`
+              }
+            `}
             >
-              <div className=" pr-8  w-[96%] truncate">
+              <div
+                className={`"pr-8 ${disabled ? "" : "px-2"}  w-[96%] truncate`}
+              >
                 {searchValue ? (
                   <FormatComponent
                     item={searchValue}
@@ -504,7 +509,7 @@ const SelectComponent = forwardRef(
                     }`
               }`}
             >
-              <div className="pr-8  w-[96%] truncate">
+              <div className="pr-8 px-2  w-[96%] truncate">
                 {searchValue ? (
                   <FormatComponent
                     item={searchValue}
