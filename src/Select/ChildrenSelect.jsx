@@ -22,18 +22,12 @@ function ChildrenSelect({
   customFormat,
   selectedClassName,
   height,
-  dropHover
+  dropHover,
 }) {
   const listRef = useRef();
   const [highlightedIndex, setHighlightedIndex] = useState(scrollSelect || 0);
 
-  useEffect(() => {
-    if (listRef.current) {
-      listRef.current.scrollToIndex(highlightedIndex);
-    }
-  }, [highlightedIndex]);
-
-  const handleSelect = (item, displayValue = "", idx) => {
+  const handleSelect = (item, idx) => {
     setScrollSelect(idx);
     const value =
       item._id ||
@@ -101,20 +95,33 @@ function ChildrenSelect({
     isMultiple ? setIsDropdownOpen(true) : setIsDropdownOpen(false);
   };
 
+  // Aplanar arrayDropdown para tener una lista lineal de opciones
+  let count = 0;
+  const flatOptions = arrayDropdown.flatMap((item, idx) =>
+    isCategory
+      ? [
+          { type: "category", title: item.title, count: count++ },
+          ...item.options.map((opt) => ({ ...opt, count: count++ })),
+        ]
+      : { ...item }
+  );
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "ArrowDown") {
         setHighlightedIndex((prevIndex) =>
-          Math.min(prevIndex + 1, arrayDropdown.length - 1)
+          Math.min(prevIndex + 1, flatOptions.length - 1)
         );
       } else if (event.key === "ArrowUp") {
         setHighlightedIndex((prevIndex) => Math.max(prevIndex - 1, 0));
       } else if (event.key === "Enter") {
         event.preventDefault();
         // Selecciona el ítem cuando se presiona Enter
+        const arrayFilter = flatOptions.filter((item) => item.name);
         handleSelect(
-          arrayDropdown[highlightedIndex],
-          arrayDropdown[highlightedIndex]._id,
+          isCategory
+            ? arrayFilter[highlightedIndex - 1].name
+            : arrayDropdown[highlightedIndex],
           highlightedIndex
         );
       }
@@ -125,6 +132,12 @@ function ChildrenSelect({
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [arrayDropdown, highlightedIndex]);
+
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current.scrollToIndex(highlightedIndex);
+    }
+  }, [highlightedIndex]);
 
   useEffect(() => {
     if (clearSelect) {
@@ -144,18 +157,19 @@ function ChildrenSelect({
   const renderItem = (item, value, idx) => (
     <div
       key={value}
-      className={`break-words py-2 ${dropHover ? dropHover : "hover:bg-slate-600"}  ${
-        highlightedIndex === idx ? (selectedClassName || "bg-slate-600") : ""}
+      className={`break-words py-2 ${
+        dropHover ? dropHover : "hover:bg-slate-600"
+      }  ${highlightedIndex === idx ? selectedClassName || "bg-slate-600" : ""}
         cursor-pointer ${
-        isMultiple
-          ? selectedValueID.includes(value)
+          isMultiple
+            ? selectedValueID.includes(value)
+              ? `${selectedClassName || "bg-[#2a3547]"} selected`
+              : ""
+            : selectedValueID === value
             ? `${selectedClassName || "bg-[#2a3547]"} selected`
             : ""
-          : selectedValueID === value
-          ? `${selectedClassName || "bg-[#2a3547]"} selected`
-          : ""
-      } overflow-scroll rounded-md p-2`}
-      onClick={() => handleSelect(isCategory ? value : item, value, idx)}
+        } overflow-scroll rounded-md p-2`}
+      onClick={() => handleSelect(isCategory ? value : item, idx)}
     >
       <FormatComponent
         item={item}
@@ -176,19 +190,27 @@ function ChildrenSelect({
     </div>
   );
 
-  const renderOptions = () =>
-    isCategory
-      ? arrayDropdown.map((item, idx) => (
-          <div key={item.title}>
-            <span className="text-gray-400 font-light text-[0.70rem]">
-              {item.title}
-            </span>
-            {item.options.map((value) => renderItem(item, value.name, idx))}
+  const renderOptions = () => {
+    if (isCategory) {
+      let count = 0;
+      return flatOptions.map((item) =>
+        item.title ? (
+          <div
+            key={item.title}
+            className="text-gray-400 font-light text-[0.70rem]"
+          >
+            {item.title}
           </div>
-        ))
-      : arrayDropdown.map((item, idx) =>
-          renderItem(item, item._id || item.name || item, idx)
-        );
+        ) : (
+          renderItem(item, item.name, ++count)
+        )
+      );
+    } else {
+      return arrayDropdown.map((item, idx) =>
+        renderItem(item, item._id || item.name || item, idx)
+      );
+    }
+  };
 
   const calculateHeightClassNormal = (length) => {
     if (length === 1) return "h-[2.2rem]";
@@ -199,7 +221,11 @@ function ChildrenSelect({
   };
 
   return arrayDropdown ? (
-    <div className={`${height || calculateHeightClassNormal(arrayDropdown.length)}`}>
+    <div
+      className={`${
+        height || calculateHeightClassNormal(arrayDropdown.length)
+      }`}
+    >
       <VList ref={listRef} className="scrollBar">
         {renderOptions()}
       </VList>

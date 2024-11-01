@@ -376,20 +376,20 @@ const SelectComponent = forwardRef(
     };
 
     return (
-      <>
+      <div className="relative w-full text-left">
         {/* Input de búsqueda */}
         <div className="relative w-full text-left">
           <input
             ref={inputRef}
             type="text"
-            className={`${
+            className={`px-2 ${
               disabled
                 ? disabledClassName ||
                   className ||
-                  " h-10 px-2 bg-[#3A4659] text-gray-400 w-full rounded-md hover:outline hover:outline-none focus:outline-none "
+                  " h-10 bg-[#3A4659] text-gray-400 w-full rounded-md hover:outline hover:outline-none focus:outline-none "
                 : `${
                     className ||
-                    "h-10 px-2 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none"
+                    "h-10 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none"
                   } }`
             }`}
             multiple={isMultiple}
@@ -631,7 +631,7 @@ const SelectComponent = forwardRef(
             )}
           </>
         )}
-      </>
+      </div>
     );
   }
 );
