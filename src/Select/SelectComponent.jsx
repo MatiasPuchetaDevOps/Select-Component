@@ -442,7 +442,7 @@ const SelectComponent = forwardRef(
             `}
             >
               <div
-                className={`"pr-8 ${disabled ? "" : "px-2"}  w-[96%] truncate`}
+                className={`"pr-8 ${disabled ? "" : "px-2"} ${!searchValue && "text-gray-400"} w-[96%] truncate`}
               >
                 {searchValue ? (
                   <FormatComponent
@@ -509,7 +509,7 @@ const SelectComponent = forwardRef(
                     }`
               }`}
             >
-              <div className="pr-8 px-2  w-[96%] truncate">
+              <div className={`pr-8 px-2 w-[96%] truncate ${!searchValue && "text-gray-400"}`}>
                 {searchValue ? (
                   <FormatComponent
                     item={searchValue}
