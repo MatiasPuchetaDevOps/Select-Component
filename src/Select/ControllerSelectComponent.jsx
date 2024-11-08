@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import SelectComponent from "./SelectComponent";
 import { Controller } from "react-hook-form";
-import { useAlert } from "../../context/alertContext";
 
 function ControllerSelectComponent({
   id,
@@ -28,7 +27,6 @@ function ControllerSelectComponent({
   height,
   dropHover,
 }) {
-  const { showAlert } = useAlert();
   const handleValue = async (item, field) => {
     let value;
 
@@ -64,16 +62,6 @@ function ControllerSelectComponent({
     }
     onSelect(item ? item : { item: undefined });
   };
-
-  useEffect(() => {
-    if (!name) {
-      showAlert({
-        msg: "No se encontro el name del select",
-        status: 400,
-      });
-      return;
-    }
-  }, []);
 
   return (
     <Controller
