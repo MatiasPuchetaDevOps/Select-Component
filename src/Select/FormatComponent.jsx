@@ -1,7 +1,7 @@
 import React from "react";
 
-function FormatComponent({ defaultFormat, item, customFormat }) {
-  return <>{customFormat ? customFormat(item) : defaultFormat}</>;
+function FormatComponent({ defaultFormat, isOnClick, item, customFormat }) {
+  return <>{customFormat && isOnClick ? customFormat(item) : defaultFormat}</>;
 }
 
 export default FormatComponent;

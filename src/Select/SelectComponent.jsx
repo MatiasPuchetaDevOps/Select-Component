@@ -5,7 +5,7 @@ import React, {
   useEffect,
   forwardRef,
 } from "react";
-import { debounce } from "lodash";
+import { debounce, isArray } from "lodash";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import ChildrenSelect from "./ChildrenSelect";
 import FormatComponent from "./FormatComponent";
@@ -51,6 +51,8 @@ const SelectComponent = forwardRef(
     const [inputSelect, setInputSelect] = useState(false);
     const [scrollSelect, setScrollSelect] = useState(false);
     const [hasRenderedOnce, setHasRenderedOnce] = useState(false);
+    const [isOnClick, setIsOnClick] = useState(false);
+
     // Setea los valores iniciales
     useEffect(() => {
       if (render) {
@@ -106,6 +108,8 @@ const SelectComponent = forwardRef(
     const handleSearchChange = async (e) => {
       const value = e.target.value;
       setSearchValue(value);
+      setIsOnClick(false);
+      onSelect("");
 
       // Ejecutar la función de búsqueda y setear el array de resultados
       if (isSearch && value.length >= 2) {
@@ -237,6 +241,7 @@ const SelectComponent = forwardRef(
             onClick={() => {
               setSearchValue(""),
                 setSelectedValueID(),
+                setArrayDropdown(isSearch ? [] : render),
                 setIsDropdownOpen(render),
                 onSelect([]); // Limpiar input
             }}
@@ -311,10 +316,12 @@ const SelectComponent = forwardRef(
       if (isMultiple) {
         // setea el defaultValue en el input si es multiple
         const defaultValue = handleDefauldMultiple();
-        const array = defaultValue
+        let array = defaultValue
           ? [...searchValue, ...defaultValue]
           : searchValue;
-
+        if (!isArray(array)) {
+          array = [];
+        }
         //Eliminmar duplicados
         const foundItemWithoutDuplicates = array.reduce((acc, current) => {
           const x = acc.find(
@@ -394,14 +401,18 @@ const SelectComponent = forwardRef(
             }`}
             multiple={isMultiple}
             value={
-              searchValue?.long_name ||
-              searchValue?.name ||
-              searchValue?.username ||
-              searchValue?.description ||
-              searchValue?.full_name ||
-              searchValue[searchProperty] ||
-              searchValue ||
-              ""
+              searchValue === true
+                ? "Activo"
+                : searchValue === false
+                ? "Inactivo"
+                : searchValue?.long_name ||
+                  searchValue?.name ||
+                  searchValue?.username ||
+                  searchValue?.description ||
+                  searchValue?.full_name ||
+                  searchValue[searchProperty] ||
+                  searchValue ||
+                  ""
             }
             disabled={disabled}
             onChange={handleSearchChange}
@@ -442,11 +453,14 @@ const SelectComponent = forwardRef(
             `}
             >
               <div
-                className={`"pr-8 ${disabled ? "" : "px-2"} ${!searchValue && "text-gray-400"} w-[96%] truncate`}
+                className={`"pr-8 ${disabled ? "" : "px-2"} ${
+                  !searchValue && "text-gray-400"
+                } w-[96%] truncate`}
               >
                 {searchValue ? (
                   <FormatComponent
                     item={searchValue}
+                    isOnClick={isOnClick}
                     customFormat={customFormat}
                     defaultFormat={
                       <div className="flex w-full flex-wrap h-10 overflow-scroll gap-2">
@@ -501,7 +515,7 @@ const SelectComponent = forwardRef(
                     "h-10 px-2 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none "
                   : `${
                       className ||
-                      "h-10 px-2 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none"
+                      "h-10  bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none"
                     } absolute top-0 left-0 z-50 truncate py-1 flex items-center ${
                       arrayDropdown.length > 0 && searchValue
                         ? "text-white"
@@ -509,19 +523,29 @@ const SelectComponent = forwardRef(
                     }`
               }`}
             >
-              <div className={`pr-8 px-2 w-[96%] truncate ${!searchValue && "text-gray-400"}`}>
+              <div
+                className={`pr-8 px-2 w-[96%] truncate ${
+                  !searchValue && "text-gray-400"
+                }`}
+              >
                 {searchValue ? (
                   <FormatComponent
                     item={searchValue}
+                    isOnClick={isOnClick}
                     customFormat={customFormat}
                     defaultFormat={
                       <div>
-                        {searchValue.name ||
-                          searchValue.username ||
-                          searchValue.description ||
-                          searchValue.full_name ||
-                          searchValue[searchProperty] ||
-                          searchValue}
+                        {searchValue === true
+                          ? "Activo"
+                          : searchValue === false
+                          ? "Inactivo"
+                          : searchValue?.long_name ||
+                            searchValue.name ||
+                            searchValue.username ||
+                            searchValue.description ||
+                            searchValue.full_name ||
+                            searchValue[searchProperty] ||
+                            searchValue}
                       </div>
                     }
                   />
@@ -581,6 +605,7 @@ const SelectComponent = forwardRef(
                     selectedClassName,
                     height,
                     dropHover,
+                    setIsOnClick,
                   }}
                 />
               </div>

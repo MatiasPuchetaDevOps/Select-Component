@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SelectComponent from "./SelectComponent";
 import { Controller } from "react-hook-form";
+import { useAlert } from "../../context/alertContext";
 
 function ControllerSelectComponent({
   id,
@@ -8,7 +9,6 @@ function ControllerSelectComponent({
   control,
   render,
   required = false,
-  type = "name",
   disabled = false,
   defaultValue,
   searchProperty = ["name"],
@@ -26,10 +26,12 @@ function ControllerSelectComponent({
   dropClassName,
   selectedClassName,
   height,
-  dropHover
+  dropHover,
 }) {
+  const { showAlert } = useAlert();
   const handleValue = async (item, field) => {
     let value;
+
     if (isMultiple) {
       let items = [];
       item.map((item) => items.push(item._id || item.name || item));
@@ -44,28 +46,38 @@ function ControllerSelectComponent({
       return;
     }
     if (
-      (item.type === "enabled" ||
-        item.type === "status" ||
-        item.type === "state") &&
+      (item?.type === "enabled" ||
+        item?.type === "status" ||
+        item?.type === "state") &&
       !optionsAlternatives
     ) {
-      value = item.name === "Activo" ? true : false;
+      value = item?.name === "Activo" ? true : false;
     } else {
-      value = item.item
-        ? item.item || item.item._id || item.item.name
-        : item.name;
+      value = item?.item
+        ? item?.item || item?.item._id || item?.item.name
+        : item?.name;
     }
     if (returnString) {
       field.onChange(value.name);
     } else {
       field.onChange(value);
     }
-    onSelect(item);
+    onSelect(item ? item : { item: undefined });
   };
+
+  useEffect(() => {
+    if (!name) {
+      showAlert({
+        msg: "No se encontro el name del select",
+        status: 400,
+      });
+      return;
+    }
+  }, []);
 
   return (
     <Controller
-      name={name}
+      name={name ? name : ""}
       control={control}
       defaultValue={
         defaultValue === "Activo"
@@ -94,17 +106,16 @@ function ControllerSelectComponent({
           className={className}
           required={required}
           defaultValue={defaultValue}
-          type={type}
           funtionSearch={funtionSearch}
           searchProperty={searchProperty}
           placeholder={placeholder}
           isSearch={isSearch}
           isMultiple={isMultiple}
           disabledClassName={disabledClassName}
-          dropClassName = {dropClassName}
-          selectedClassName = {selectedClassName}
-          height = {height}
-          dropHover = {dropHover}
+          dropClassName={dropClassName}
+          selectedClassName={selectedClassName}
+          height={height}
+          dropHover={dropHover}
           isCategory={isCategory}
           customFormat={customFormat}
         />
