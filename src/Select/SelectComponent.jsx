@@ -9,6 +9,7 @@ import { debounce, isArray } from "lodash";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import ChildrenSelect from "./ChildrenSelect";
 import FormatComponent from "./FormatComponent";
+import { Spinner } from "@material-tailwind/react";
 
 const SelectComponent = forwardRef(
   (
@@ -52,6 +53,7 @@ const SelectComponent = forwardRef(
     const [scrollSelect, setScrollSelect] = useState(false);
     const [hasRenderedOnce, setHasRenderedOnce] = useState(false);
     const [isOnClick, setIsOnClick] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     // Setea los valores iniciales
     useEffect(() => {
@@ -85,15 +87,17 @@ const SelectComponent = forwardRef(
 
     // Manejo de la busqueda de elementos
     const handleSeach = async (searchText) => {
+      setLoading(true);
+      if (!isDropdownOpen) {
+        setIsDropdownOpen(true);
+      }
       const res = await funtionSearch(searchText);
       if (res.length > 0) {
         setArrayDropdown(res);
       } else {
         setArrayDropdown([]);
       }
-      if (!isDropdownOpen) {
-        setIsDropdownOpen(true);
-      }
+      setLoading(false);
     };
 
     // Debounce para la búsqueda con un retraso de 300ms
@@ -508,19 +512,17 @@ const SelectComponent = forwardRef(
                   inputRef.current.focus();
                 }, 0);
               }}
-              className={` ${
+              className={`${
                 disabled
                   ? disabledClassName ||
                     className + "text-gray-400" ||
                     "h-10 px-2 bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none "
-                  : `${
-                      className ||
-                      "h-10  bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none"
-                    } absolute top-0 left-0 z-50 truncate py-1 flex items-center ${
-                      arrayDropdown.length > 0 && searchValue
-                        ? "text-white"
-                        : "text-gray-400"
-                    }`
+                  : className ||
+                    "h-10  bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none"
+              } absolute top-0 left-0 z-50 truncate py-1 flex items-center ${
+                arrayDropdown.length > 0 && searchValue
+                  ? "text-white"
+                  : "text-gray-400"
               }`}
             >
               <div
@@ -628,9 +630,15 @@ const SelectComponent = forwardRef(
                 } rounded-md scrollBar p-2 max-h-60 text-left fade-in shadow-lg overflow-scroll 
           `}
               >
-                <p className="text-gray-400">
-                  Escriba para realizar la búsqueda
-                </p>
+                {loading ? (
+                  <div>
+                    <Spinner className="h-4 w-4" />
+                  </div>
+                ) : (
+                  <p className="text-gray-400">
+                    Escriba para realizar la búsqueda
+                  </p>
+                )}
               </div>
             ) : (
               <div

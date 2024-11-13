@@ -1,20 +1,22 @@
 # 📦 SelectComponent
 
-**`SelectComponent`** es un componente versátil de selección en React. Incluye búsqueda, filtrado, selección múltiple y opciones de formato personalizado, lo que facilita su integración y personalización según tus necesidades.
+**`SelectComponent`** is a versatile selection component in React. It includes search, filtering, multi-select, and custom formatting options, making it easy to integrate and customize to fit your needs.
 
-## 📥 Instalación
+## 📥 Installation
 
-Para instalar el paquete, usa el siguiente comando en tu terminal:
+To install the package, use the following command in your terminal:
+
 
 ```bash
 npm install select-components
 ```
 
-# Casos de uso
+# Usage Examples
 
-## Selección Básica
+## Basic Selection
 
-El prop render debe ser un array de objetos que contengan la propiedad name.
+
+The **render** prop should be an array of objects containing the **name** property.
 
 ```jsx
 const urgency = [
@@ -30,11 +32,12 @@ const urgency = [
 />
 ```
 
-# Compatibilidad con react-hook-form
+# Compatibility with react-hook-form
 
-Utiliza ControllerSelectComponent para integrar SelectComponent con react-hook-form.
 
-## Controller basico
+Use **ControllerSelectComponent** to integrate SelectComponent with **react-hook-form**.
+
+## Basic Controller
 
 ```jsx
 <ControllerSelectComponent
@@ -46,9 +49,9 @@ Utiliza ControllerSelectComponent para integrar SelectComponent con react-hook-f
 />
 ```
 
-## Activar Búsqueda
+## Enable Search
 
-Permite la búsqueda en tiempo real utilizando un endpoint para obtener datos.
+Enable real-time search using an endpoint to fetch data.
 
 ```jsx
   <ControllerSelectComponent
@@ -63,9 +66,9 @@ Permite la búsqueda en tiempo real utilizando un endpoint para obtener datos.
   />
 ```
 
-## Formato Personalizado
+## Custom Formatting
 
-Permite definir un formato personalizado para cada opción.
+Define a custom format for each option.
 
 ```jsx
 <SelectComponent
@@ -75,9 +78,9 @@ Permite definir un formato personalizado para cada opción.
 />
 ```
 
-## Selección Múltiple
+## Multi-Select
 
-Habilita la selección de múltiples opciones.
+Enable the selection of multiple options.
 
 ```jsx
 <SelectComponent
@@ -88,9 +91,9 @@ Habilita la selección de múltiples opciones.
 />
 ```
 
-## Por categoria
+## By Category
 
-Para crear subopciones organizadas por categorías:
+Create sub-options organized by categories:
 
 ```jsx
   const unitOptions = [
@@ -130,32 +133,32 @@ Para crear subopciones organizadas por categorías:
 
 A continuación, se detallan las propiedades que puedes utilizar para configurar el componente según tus necesidades:
 
-| Propiedad         | Tipo     | Descripción                                                                         | Valor Predeterminado |
+| Property         | Type     | Description                                                                         | Default  |
 | ----------------- | -------- | ----------------------------------------------------------------------------------- | -------------------- |
-| render            | function | Función para renderizar cada elemento de forma personalizada.                       | undefined            |
-| name              | string   | Nombre del componente, útil en formularios.                                         | undefined            |
-| funtionSearch     | function | Función que se ejecuta al realizar una búsqueda personalizada.                      | () => {}             |
-| onSelect          | function | Función que se ejecuta cuando se selecciona un elemento.                            | () => {}             |
-| isCategory        | boolean  | Muestra las categorías dentro de los elementos.                                     | undefined            |
-| defaultValue      | string   | Valor predeterminado que se mostrará al iniciar.                                    | ""                   |
-| searchProperty    | string   | Propiedad del objeto para ejecutar la búsqueda o seter en el campo.                 | "name"               |
-| placeholder       | string   | Texto que aparecerá en el campo cuando esté vacío.                                  | ""                   |
-| isSearch          | boolean  | Habilita la función de búsqueda.                                                    | false                |
-| isFilter          | boolean  | Habilita el filtrado de elementos (se recomienda cuando isSearch es false).         | true                 |
-| required          | boolean  | Define si la selección es obligatoria.                                              | true                 |
-| isMultiple        | boolean  | Habilita la selección múltiple.                                                     | false                |
-| customFormat      | function | Función personalizada para renderizar cada elemento, usando el item como argumento. | undefined            |
-| disabled          | boolean  | Desactiva el componente cuando está en true.                                        | false                |
-| disabledClassName | string   | Clase CSS personalizada cuando esta desactivado.                                    | undefined            |
-| className         | string   | Clase CSS personalizada para estilizar el componente.                               | ""                   |
-| selectedClassName | string   | Clase CSS personalizada de la opcion seleccionada.                                  | undefined            |
-| dropClassName     | string   | Clase CSS personalizada del desplegable.                                            | undefined            |
-| dropHover         | string   | Clase CSS personalizada hover del drop.                                             | undefined            |
+| render            | function | Function to render each item in a custom way.	                                     | undefined            |
+| name              | string   | Component name, useful in forms.	                                                   | undefined            |
+| funtionSearch     | function | Function executed to perform custom search.	                                       | () => {}             |
+| onSelect          | function | Function executed when an item is selected.                                         | () => {}             |
+| isCategory        | boolean  | Displays categories within items.                                                   | undefined            |
+| defaultValue      | string   | Default value displayed initially.                                                  | ""                   |
+| searchProperty    | string   | Object property used to execute search or setter in the field.                      | "name"               |
+| placeholder       | string   | Text displayed in the empty field.                                                  | ""                   |
+| isSearch          | boolean  | Enables the search function.                                                        | false                |
+| isFilter          | boolean  | Enables filtering of items (recommended when isSearch is false).                    | true                 |
+| required          | boolean  | Defines if selection is mandatory.                                                   | true                 |
+| isMultiple        | boolean  | Enables multiple selection.	                                                       | false                |
+| customFormat      | function | Custom function to render each item, using the item as an argument.                 | undefined            |
+| disabled          | boolean  | Disables the component when true.                                                    | false                |
+| disabledClassName | string   | Custom CSS class when disabled..                                                     | undefined            |
+| className         | string   | Custom CSS class to style the component.                                            | ""                   |
+| selectedClassName | string   | Custom CSS class for selected option.                                               | undefined            |
+| dropClassName     | string   | Custom CSS class for dropdown.                                                      | undefined            |
+| dropHover         | string   | Custom CSS hover class for dropdown                                                 | undefined            |
 
 
 
- # Propiedad añadida para el Controller
+ # Property Added for Controller
 
-| Propiedad         | Tipo     | Descripción                                                                         | Valor Predeterminado |
+| Property          | Type	   | Description                                                                         | Default              |
 | ----------------- | -------- | ----------------------------------------------------------------------------------- | -------------------- |
-| returnString      | boolean  | Controla si se devuelve un string o el objeto                                        | false                |
+| returnString      | boolean  | Controls if a string or the object is returned.                                     | false                |
