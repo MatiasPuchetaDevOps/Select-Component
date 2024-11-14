@@ -23,14 +23,12 @@ function ChildrenSelect({
   selectedClassName,
   height,
   dropHover,
-  setIsOnClick
 }) {
   const listRef = useRef();
   const [highlightedIndex, setHighlightedIndex] = useState(scrollSelect || 0);
 
   const handleSelect = (item, idx) => {
     setScrollSelect(idx);
-    setIsOnClick(true)
     const value =
       item._id ||
       item.name ||

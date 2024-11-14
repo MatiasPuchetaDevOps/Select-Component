@@ -45,14 +45,13 @@ const SelectComponent = forwardRef(
       isMultiple ? [] : null
     );
     const [arrayDropdown, setArrayDropdown] = useState([]);
-    // Referencias para manejar clicks fuera del modal
+    // Referencias para manejar los clicks fuera del modal
     const modalRef = useRef(null);
     const inputRef = useRef(null);
     const [fakeInput, setFakeInput] = useState(false);
     const [inputSelect, setInputSelect] = useState(false);
     const [scrollSelect, setScrollSelect] = useState(false);
     const [hasRenderedOnce, setHasRenderedOnce] = useState(false);
-    const [isOnClick, setIsOnClick] = useState(false);
     const [loading, setLoading] = useState(false);
 
     // Setea los valores iniciales
@@ -85,7 +84,7 @@ const SelectComponent = forwardRef(
       }
     }, [props.value, render]);
 
-    // Manejo de la busqueda de elementos
+    // Manejo de la búsqueda de elementos
     const handleSeach = async (searchText) => {
       setLoading(true);
       if (!isDropdownOpen) {
@@ -112,7 +111,6 @@ const SelectComponent = forwardRef(
     const handleSearchChange = async (e) => {
       const value = e.target.value;
       setSearchValue(value);
-      setIsOnClick(false);
       onSelect("");
 
       // Ejecutar la función de búsqueda y setear el array de resultados
@@ -326,7 +324,7 @@ const SelectComponent = forwardRef(
         if (!isArray(array)) {
           array = [];
         }
-        //Eliminmar duplicados
+        //Eliminar duplicados
         const foundItemWithoutDuplicates = array.reduce((acc, current) => {
           const x = acc.find(
             (item) =>
@@ -464,7 +462,6 @@ const SelectComponent = forwardRef(
                 {searchValue ? (
                   <FormatComponent
                     item={searchValue}
-                    isOnClick={isOnClick}
                     customFormat={customFormat}
                     defaultFormat={
                       <div className="flex w-full flex-wrap h-10 overflow-scroll gap-2">
@@ -533,7 +530,6 @@ const SelectComponent = forwardRef(
                 {searchValue ? (
                   <FormatComponent
                     item={searchValue}
-                    isOnClick={isOnClick}
                     customFormat={customFormat}
                     defaultFormat={
                       <div>
@@ -607,7 +603,6 @@ const SelectComponent = forwardRef(
                     selectedClassName,
                     height,
                     dropHover,
-                    setIsOnClick,
                   }}
                 />
               </div>
