@@ -27,7 +27,7 @@ function ControllerSelectComponent({
   height,
   dropHover,
 }) {
-  const handleValue = async (item, field) => {
+  const handleValue = async (item, field, clear = false) => {
     let value;
 
     if (isMultiple) {
@@ -60,6 +60,11 @@ function ControllerSelectComponent({
     } else {
       field.onChange(value);
     }
+
+    if (clear) {
+      field.onChange("");
+      return;
+    }
     onSelect(item ? item : { item: undefined });
   };
 
@@ -89,7 +94,7 @@ function ControllerSelectComponent({
           id={id}
           name={name}
           render={render}
-          onSelect={(item) => handleValue(item, field)}
+          onSelect={(item, clear = false) => handleValue(item, field, clear)}
           disabled={disabled}
           className={className}
           required={required}

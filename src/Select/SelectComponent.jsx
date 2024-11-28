@@ -111,7 +111,6 @@ const SelectComponent = forwardRef(
     const handleSearchChange = async (e) => {
       const value = e.target.value;
       setSearchValue(value);
-      onSelect("");
 
       // Ejecutar la función de búsqueda y setear el array de resultados
       if (isSearch && value.length >= 2) {
@@ -245,7 +244,7 @@ const SelectComponent = forwardRef(
                 setSelectedValueID(),
                 setArrayDropdown(isSearch ? [] : render),
                 setIsDropdownOpen(render),
-                onSelect([]); // Limpiar input
+                onSelect("", true);
             }}
             className="text-gray-400 cursor-pointer"
             icon="teenyicons:x-small-outline"
