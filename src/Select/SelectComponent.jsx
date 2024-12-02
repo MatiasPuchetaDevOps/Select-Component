@@ -64,9 +64,13 @@ const SelectComponent = forwardRef(
     useEffect(() => {
       if (props.value === `` && isMultiple) {
         setSearchValue("");
+        setArrayDropdown([]);
+        setFakeInput(false);
       }
       if (props.value === `` && !isMultiple) {
         setSearchValue([]);
+        setArrayDropdown([]);
+        setFakeInput(false);
       }
       if (
         render?.length > 0 &&
@@ -82,7 +86,7 @@ const SelectComponent = forwardRef(
       } else if (props.value && !isMultiple) {
         setSearchValue(props.value);
       }
-    }, [props.value, render]);
+    }, [props.value, selectedValueID, render]);
 
     // Manejo de la búsqueda de elementos
     const handleSeach = async (searchText) => {
@@ -243,8 +247,7 @@ const SelectComponent = forwardRef(
               setSearchValue(""),
                 setSelectedValueID(),
                 setArrayDropdown(isSearch ? [] : render),
-                setIsDropdownOpen(render),
-                onSelect("", true);
+                setIsDropdownOpen(render);
             }}
             className="text-gray-400 cursor-pointer"
             icon="teenyicons:x-small-outline"
@@ -505,7 +508,7 @@ const SelectComponent = forwardRef(
                 setFakeInput(false);
                 setIsDropdownOpen(true);
                 setTimeout(() => {
-                  inputRef.current.focus();
+                  inputRef?.current?.focus();
                 }, 0);
               }}
               className={`${
