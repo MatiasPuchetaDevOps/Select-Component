@@ -110,7 +110,7 @@ function ChildrenSelect({
     const handleKeyDown = (event) => {
       if (event.key === "ArrowDown") {
         setHighlightedIndex((prevIndex) =>
-          Math.min(prevIndex + 1, flatOptions.length - 1)
+          Math.min(prevIndex + 1, flatOptions?.length - 1)
         );
       } else if (event.key === "ArrowUp") {
         setHighlightedIndex((prevIndex) => Math.max(prevIndex - 1, 0));

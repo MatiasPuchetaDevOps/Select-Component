@@ -95,7 +95,7 @@ const SelectComponent = forwardRef(
         setIsDropdownOpen(true);
       }
       const res = await funtionSearch(searchText);
-      if (res.length > 0) {
+      if (res?.length > 0) {
         setArrayDropdown(res);
       } else {
         setArrayDropdown([]);
@@ -117,14 +117,14 @@ const SelectComponent = forwardRef(
       setSearchValue(value);
 
       // Ejecutar la función de búsqueda y setear el array de resultados
-      if (isSearch && value.length >= 2) {
+      if (isSearch && value?.length >= 2) {
         const res = await handleSearchDebounced(value);
         if (res) {
           setArrayDropdown(res);
         }
       }
 
-      if (isSearch && value.length < 2) {
+      if (isSearch && value?.length < 2) {
         setArrayDropdown([]);
       }
 
@@ -141,7 +141,7 @@ const SelectComponent = forwardRef(
               );
 
               // Retornar el objeto con las opciones filtradas si hay coincidencias
-              if (filteredOptions.length > 0) {
+              if (filteredOptions?.length > 0) {
                 return { ...item, options: filteredOptions };
               }
 
@@ -280,9 +280,9 @@ const SelectComponent = forwardRef(
 
     // Función para manejar el valor por defecto multiple
     const handleDefauldMultiple = () => {
-      if (defaultValue && render.length > 0) {
+      if (defaultValue && render?.length > 0) {
         const defaultArray =
-          typeof defaultValue === "string" || defaultValue.length === undefined
+          typeof defaultValue === "string" || defaultValue?.length === undefined
             ? [defaultValue]
             : defaultValue;
 
@@ -304,7 +304,7 @@ const SelectComponent = forwardRef(
           }
         });
 
-        if (foundItem && foundItem.length > 0) {
+        if (foundItem && foundItem?.length > 0) {
           const array = [...searchValue, ...foundItem];
           setSelectedValueID(defaultArray);
           return array;
@@ -519,13 +519,13 @@ const SelectComponent = forwardRef(
                   : className ||
                     "h-10  bg-[#3A4659] text-white w-full rounded-md hover:outline hover:outline-none focus:outline-none"
               } absolute top-0 left-0 z-50 truncate py-1 flex items-center ${
-                arrayDropdown.length > 0 && searchValue
+                arrayDropdown?.length > 0 && searchValue
                   ? "text-white"
                   : "text-gray-400"
               }`}
             >
               <div
-                className={`pr-8 px-2 w-[96%] truncate ${
+                className={`pr-8 px-2 w-[96%] red truncate ${
                   !searchValue && "text-gray-400"
                 }`}
               >
@@ -560,11 +560,10 @@ const SelectComponent = forwardRef(
             </div>
           )}
         </div>
-
         {/* Dropdown de resultados */}
         {isDropdownOpen && (
           <>
-            {arrayDropdown && arrayDropdown.length > 0 ? (
+            {arrayDropdown && arrayDropdown?.length > 0 ? (
               <div
                 onMouseDown={(event) => event.preventDefault()}
                 style={{
