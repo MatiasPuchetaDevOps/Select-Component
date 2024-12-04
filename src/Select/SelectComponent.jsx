@@ -53,6 +53,7 @@ const SelectComponent = forwardRef(
     const [scrollSelect, setScrollSelect] = useState(false);
     const [hasRenderedOnce, setHasRenderedOnce] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [clickClose, setClickClose] = useState(false);
 
     // Setea los valores iniciales
     useEffect(() => {
@@ -62,19 +63,18 @@ const SelectComponent = forwardRef(
     }, [render]);
 
     useEffect(() => {
-      if (props.value === `` && isMultiple) {
+      if (props.value === `` && isMultiple && clickClose) {
         setSearchValue("");
         setArrayDropdown([]);
         setFakeInput(false);
       }
-      if (props.value === `` && !isMultiple) {
+      if (props.value === `` && !isMultiple  && clickClose) {
         setSearchValue([]);
         setArrayDropdown([]);
         setFakeInput(false);
       }
       if (
         render?.length > 0 &&
-        !hasRenderedOnce &&
         props.value &&
         !isMultiple
       ) {
@@ -82,7 +82,6 @@ const SelectComponent = forwardRef(
           Object.values(item).some((value) => value === props.value)
         );
         setSearchValue(foundItem ? foundItem.name : props.value);
-        setHasRenderedOnce(true); // Marcar que ya se ejecutó una vez
       } else if (props.value && !isMultiple) {
         setSearchValue(props.value);
       }
@@ -244,10 +243,12 @@ const SelectComponent = forwardRef(
         return (
           <Icon
             onClick={() => {
+              setClickClose(true)
               setSearchValue(""),
                 setSelectedValueID(),
                 setArrayDropdown(isSearch ? [] : render),
                 setIsDropdownOpen(render);
+                !isSearch && onSelect("");
             }}
             className="text-gray-400 cursor-pointer"
             icon="teenyicons:x-small-outline"
