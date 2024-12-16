@@ -63,26 +63,25 @@ const SelectComponent = forwardRef(
     }, [render]);
 
     useEffect(() => {
-      if (props.value === `` && isMultiple && clickClose) {
-        setSearchValue("");
-        setArrayDropdown([]);
-        setFakeInput(false);
-      }
-      if (props.value === `` && !isMultiple  && clickClose) {
+      // Para reSetear el input con sel setValue("")
+      if (props.value === `` && isMultiple && !clickClose) {
         setSearchValue([]);
-        setArrayDropdown([]);
         setFakeInput(false);
+        isSearch && setArrayDropdown([]);
       }
-      if (
-        render?.length > 0 &&
-        props.value &&
-        !isMultiple
-      ) {
+      if (props.value === `` && !isMultiple && !clickClose) {
+        setSearchValue("");
+        setFakeInput(false);
+        isSearch && setArrayDropdown([]);
+      }
+
+      // Setea los valores iniciales definidos por el setValue de reack-hook-form
+      if (render?.length > 0 && props.value && !isMultiple && !clickClose) {
         const foundItem = render.find((item) =>
           Object.values(item).some((value) => value === props.value)
         );
         setSearchValue(foundItem ? foundItem.name : props.value);
-      } else if (props.value && !isMultiple) {
+      } else if (props.value && !isMultiple && !clickClose) {
         setSearchValue(props.value);
       }
     }, [props.value, selectedValueID, render]);
@@ -243,12 +242,14 @@ const SelectComponent = forwardRef(
         return (
           <Icon
             onClick={() => {
-              setClickClose(true)
+              console.log("first");
+              setClickClose(true);
+              props.value = "";
               setSearchValue(""),
                 setSelectedValueID(),
                 setArrayDropdown(isSearch ? [] : render),
-                setIsDropdownOpen(render);
-                !isSearch && onSelect("");
+                setIsDropdownOpen(false);
+              !isSearch && onSelect("");
             }}
             className="text-gray-400 cursor-pointer"
             icon="teenyicons:x-small-outline"
