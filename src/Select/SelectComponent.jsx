@@ -4,6 +4,7 @@ import React, {
   useRef,
   useEffect,
   forwardRef,
+  useImperativeHandle,
 } from "react";
 import { debounce, isArray } from "lodash";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -51,7 +52,6 @@ const SelectComponent = forwardRef(
     const [fakeInput, setFakeInput] = useState(false);
     const [inputSelect, setInputSelect] = useState(false);
     const [scrollSelect, setScrollSelect] = useState(false);
-    const [hasRenderedOnce, setHasRenderedOnce] = useState(false);
     const [loading, setLoading] = useState(false);
     const [clickClose, setClickClose] = useState(false);
 
@@ -61,6 +61,18 @@ const SelectComponent = forwardRef(
         setArrayDropdown(render);
       }
     }, [render]);
+
+    const clearValueSelect = () => {
+      setSearchValue("");
+      setSelectedValueID(null);
+      setFakeInput(false);
+      setArrayDropdown([]);
+    }
+
+    useImperativeHandle(ref, () => ({
+      clearValueSelect,
+    }));
+  
 
     useEffect(() => {
       // Para reSetear el input con sel setValue("")
@@ -242,7 +254,6 @@ const SelectComponent = forwardRef(
         return (
           <Icon
             onClick={() => {
-              console.log("first");
               setClickClose(true);
               props.value = "";
               setSearchValue(""),
@@ -469,27 +480,43 @@ const SelectComponent = forwardRef(
                     customFormat={customFormat}
                     defaultFormat={
                       <div className="flex w-full flex-wrap h-10 overflow-scroll gap-2">
-                        {searchValue.map((item, idx) => (
-                          <div
-                            className=" flex items-center gap-2  rounded-md"
-                            key={`item-${idx} `}
-                          >
-                            {item.name ||
-                              item.username ||
-                              item.full_name ||
-                              item.description ||
-                              searchValue[searchProperty] ||
-                              item}
-                            {!disabled && (
-                              <span
-                                className="cursor-pointer "
-                                onClick={() => handleDeletedMultiple(item)}
-                              >
-                                <Icon icon="material-symbols-light:close" />
-                              </span>
-                            )}
+                        {Array.isArray(searchValue) ? (
+                          searchValue?.map((item, idx) => (
+                            <div
+                              className=" flex items-center gap-2  rounded-md"
+                              key={`item-${idx} `}
+                            >
+                              {item.name ||
+                                item.username ||
+                                item.full_name ||
+                                item.description ||
+                                searchValue[searchProperty] ||
+                                item}
+                              {!disabled && (
+                                <span
+                                  className="cursor-pointer "
+                                  onClick={() => handleDeletedMultiple(item)}
+                                >
+                                  <Icon icon="material-symbols-light:close" />
+                                </span>
+                              )}
+                            </div>
+                          ))
+                        ) : (
+                          <div>
+                            {searchValue === true
+                              ? "Activo"
+                              : searchValue === false
+                              ? "Inactivo"
+                              : searchValue?.long_name ||
+                                searchValue.name ||
+                                searchValue.username ||
+                                searchValue.description ||
+                                searchValue.full_name ||
+                                searchValue[searchProperty] ||
+                                searchValue}
                           </div>
-                        ))}
+                        )}
                       </div>
                     }
                   />

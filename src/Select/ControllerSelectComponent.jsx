@@ -1,6 +1,6 @@
 import React from "react";
-import SelectComponent from "./SelectComponent";
 import { Controller } from "react-hook-form";
+import SelectComponent from "./SelectComponent";
 
 function ControllerSelectComponent({
   id,
@@ -27,7 +27,7 @@ function ControllerSelectComponent({
   height,
   dropHover,
 }) {
-  const handleValue = async (item, field, clear = false) => {
+  const handleValue = async (item, field) => {
     let value;
 
     if (isMultiple) {
@@ -60,11 +60,6 @@ function ControllerSelectComponent({
     } else {
       field.onChange(value);
     }
-
-    if (clear) {
-      field.onChange("");
-      return;
-    }
     onSelect(item ? item : { item: undefined });
   };
 
@@ -94,7 +89,7 @@ function ControllerSelectComponent({
           id={id}
           name={name}
           render={render}
-          onSelect={(item, clear = false) => handleValue(item, field, clear)}
+          onSelect={(item) => handleValue(item, field)}
           disabled={disabled}
           className={className}
           required={required}

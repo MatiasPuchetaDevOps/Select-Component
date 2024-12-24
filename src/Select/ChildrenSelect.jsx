@@ -214,11 +214,10 @@ function ChildrenSelect({
   };
 
   const calculateHeightClassNormal = (length) => {
-    if (length === 1) return "h-[2.2rem]";
-    if (length === 2) return "h-[5rem]";
-    if (length === 3) return "h-[7rem]";
-    if (length === 4) return "h-[10rem]";
-    return "h-40";
+    const heights = customFormat
+      ? ["h-[4rem]", "h-[6rem]", "h-[9rem]", "h-[12rem]"]
+      : ["h-[2.2rem]", "h-[5rem]", "h-[7rem]", "h-[10rem]"];
+    return heights[length - 1] || "h-40";
   };
 
   return arrayDropdown ? (
